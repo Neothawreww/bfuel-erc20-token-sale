@@ -3,7 +3,6 @@ const HDWalletProvider = require("@truffle/hdwallet-provider");
 const mnemonic = "prize jaguar monkey shadow rose inquiry matter liberty horror cargo brief remove cave task era";
 
 
-
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
   // to customize your Truffle configuration!
@@ -44,6 +43,11 @@ module.exports = {
             host: 'localhost',
             port: 8545,
             gas: 4e6
+        }
+    },
+    compilers: {
+        solc: {
+          version: "^0.4.18"
         }
     }
 };
