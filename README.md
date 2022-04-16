@@ -1,6 +1,6 @@
-# Theta Token Sale
+# BitWeb Token Sale
 
 ## Introduction
 
-This repository contains the smart contract, test cases, and deployment scirpts for the Theta token and the token sale
+This repository contains the smart contract, test cases, and deployment scirpts for the BitFuel and the token sale
 

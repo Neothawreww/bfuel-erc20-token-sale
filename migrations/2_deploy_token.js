@@ -1,7 +1,7 @@
-var ThetaToken = artifacts.require('ThetaToken');
+var BitToken = artifacts.require('BitToken');
 
 module.exports = function (deployer, network, accounts) {
     console.log('---------2----------');
-    deployer.deploy(ThetaToken);
+    deployer.deploy(BitToken);
 };
 

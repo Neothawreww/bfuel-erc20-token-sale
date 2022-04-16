@@ -5,7 +5,7 @@ import "./SafeMath.sol";
 
 
 //
-//    Copyright 2017, Theta Labs, Inc.
+//    Copyright 2017, Bit Labs, Inc.
 //
 
 

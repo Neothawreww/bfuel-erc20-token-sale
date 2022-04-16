@@ -2,14 +2,14 @@ pragma solidity ^0.4.18;
 
 
 import "./SafeMath.sol";
-import "./ThetaToken.sol";
+import "./BitToken.sol";
 
 
 //
-//    Copyright 2017, Theta Labs, Inc.
+//    Copyright 2017, Bit Labs, Inc.
 //
 
-contract ThetaTokenSale {
+contract BitTokenSale {
 
     using SafeMath for uint;
 
@@ -21,7 +21,7 @@ contract ThetaTokenSale {
 
     address internal exchangeRateController;
 
-    address internal thetaLabsReserve;
+    address internal bitLabsReserve;
 
     address internal fundDeposit;
 
@@ -29,16 +29,16 @@ contract ThetaTokenSale {
 
     uint public finalBlock;               // Block number indicating when the sale ends. Exclusive, sale will be closed at ends block.
 
-    mapping (address => bool) public whitelistMap; // Only the accounts in white list can buy theta tokens
+    mapping (address => bool) public whitelistMap; // Only the accounts in white list can buy bit tokens
 
-    uint public exchangeRate;                      // Exchange rate between 1 wei-Theta and 1 wei-Ether (18 decimals)
+    uint public exchangeRate;                      // Exchange rate between 1 wei-Bit and 1 wei-Ether (18 decimals)
 
     uint internal fundCollected = 0;              // ETH in wei
-    bool public saleStopped = false;               // Has Theta Labs stopped the sale?
-    bool public saleFinalized = false;             // Has Theta Labs finalized the sale?
+    bool public saleStopped = false;               // Has Bit Labs stopped the sale?
+    bool public saleFinalized = false;             // Has Bit Labs finalized the sale?
     bool public activated = false;                 // Is the token sale activated
 
-    ThetaToken public token;                       // The token
+    BitToken public token;                       // The token
 
     uint constant public decimals = 18;
     uint public minimalPayment = 1 ether;           // Minimum payment
@@ -50,12 +50,12 @@ contract ThetaTokenSale {
     event RemoveFromWhitelist(address addr);
 
 
-    function ThetaTokenSale(
+    function BitTokenSale(
         address _root,
         address _admin,
         address _whitelistController,
         address _exchangeRateController,
-        address _thetaLabsReserve,
+        address _bitLabsReserve,
         address _fundDeposit,
         uint _initialBlock,
         uint _finalBlock,
@@ -64,7 +64,7 @@ contract ThetaTokenSale {
         non_zero_address(_admin)
         non_zero_address(_whitelistController)
         non_zero_address(_exchangeRateController)
-        non_zero_address(_thetaLabsReserve) 
+        non_zero_address(_bitLabsReserve) 
         non_zero_address(_fundDeposit) public {
         require(_initialBlock >= getBlockNumber());
         require(_initialBlock < _finalBlock);
@@ -78,19 +78,19 @@ contract ThetaTokenSale {
         admin = _admin;
         whitelistController = _whitelistController;
         exchangeRateController = _exchangeRateController;
-        thetaLabsReserve = _thetaLabsReserve;
+        bitLabsReserve = _bitLabsReserve;
         fundDeposit = _fundDeposit;
         initialBlock = _initialBlock;
         finalBlock = _finalBlock;
         exchangeRate = _exchangeRate;
     }
 
-    function setThetaToken(address _token)
+    function setBitToken(address _token)
         non_zero_address(_token)
         only(admin)
         public {
 
-        token = ThetaToken(_token);
+        token = BitToken(_token);
         require(token.controller() == address(this)); // tokenSale is controller
     }
 
@@ -133,7 +133,7 @@ contract ThetaTokenSale {
         only(admin)
         public {
         uint reserveAmount = calcReserve(_amount);
-        require(token.mint(thetaLabsReserve, reserveAmount));
+        require(token.mint(bitLabsReserve, reserveAmount));
         require(token.mint(_recipient, _amount));
     }
 
@@ -141,7 +141,7 @@ contract ThetaTokenSale {
         return whitelistMap[account];
     }
 
-    // @notice Add accounts to the white list. Only whitelisted accounts can buy Theta tokens
+    // @notice Add accounts to the white list. Only whitelisted accounts can buy Bit tokens
     function addAccountsToWhitelist(address[] _accounts) only(whitelistController) public {
         for (uint i = 0; i < _accounts.length; i ++) {
             address account = _accounts[i];
@@ -192,7 +192,7 @@ contract ThetaTokenSale {
 
         // Allocate tokens. This will fail after sale is finalized in case it is hidden cap finalized.
         uint reserveTokens = calcReserve(boughtTokens);
-        require(token.mint(thetaLabsReserve, reserveTokens));
+        require(token.mint(bitLabsReserve, reserveTokens));
         require(token.mint(_owner, boughtTokens));
 
         // Save total collected amount
@@ -233,10 +233,10 @@ contract ThetaTokenSale {
         saleStopped = true;
     }
 
-    function changeThetaLabsReserve(address _newThetaLabsReserve) 
-        non_zero_address(_newThetaLabsReserve)
+    function changeBitLabsReserve(address _newBitLabsReserve) 
+        non_zero_address(_newBitLabsReserve)
         only(admin) public {
-        thetaLabsReserve = _newThetaLabsReserve;
+        bitLabsReserve = _newBitLabsReserve;
     }
 
     function changeFundDeposit(address _newFundDeposit) 
@@ -325,8 +325,8 @@ contract ThetaTokenSale {
         return exchangeRateController;
     }
 
-    function getThetaLabsReserve() constant public only(admin) returns (address) {
-        return thetaLabsReserve;
+    function getBitLabsReserve() constant public only(admin) returns (address) {
+        return bitLabsReserve;
     }
 
     function getFundDeposit() constant public only(admin) returns (address) {
